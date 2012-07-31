@@ -14,6 +14,11 @@ from txclib.utils import *
 from txclib.urls import API_URLS
 from txclib.config import OrderedRawConfigParser, Flipdict
 from txclib.log import logger
+<<<<<<< HEAD
+=======
+from txclib.http_utils import http_response
+from txclib.processors import visit_hostname
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 
 
 class ProjectNotInit(Exception):
@@ -41,8 +46,12 @@ class Project(object):
             self.txrc_file = self._get_transifex_file()
             self.txrc = self._get_transifex_config(self.txrc_file)
         except ProjectNotInit, e:
+<<<<<<< HEAD
             msg = "Error initializing project."
             logger.error('\n'.join([msg, instructions]))
+=======
+            logger.error('\n'.join([unicode(e), instructions]))
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
             raise
 
     def _get_config_file_path(self, root_path):
@@ -81,6 +90,28 @@ class Project(object):
         except Exception, e:
             msg = "Cannot read global configuration file: %s" % e
             raise ProjectNotInit(msg)
+<<<<<<< HEAD
+=======
+        self._migrate_txrc_file(txrc)
+        return txrc
+
+    def _migrate_txrc_file(self, txrc):
+        """Migrate the txrc file, if needed."""
+        for section in txrc.sections():
+            orig_hostname = txrc.get(section, 'hostname')
+            hostname = visit_hostname(orig_hostname)
+            if hostname != orig_hostname:
+                msg = "Hostname %s should be changed to %s."
+                logger.info(msg % (orig_hostname, hostname))
+                if (sys.stdin.isatty() and sys.stdout.isatty() and
+                    confirm('Change it now? ', default=True)):
+                    txrc.set(section, 'hostname', hostname)
+                    msg = 'Hostname changed'
+                    logger.info(msg)
+                else:
+                    hostname = orig_hostname
+            self._save_txrc_file(txrc)
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
         return txrc
 
     def _get_transifex_file(self, directory=None):
@@ -94,7 +125,14 @@ class Project(object):
         logger.debug(".transifexrc file is at %s" % directory)
         if not os.path.exists(txrc_file):
             msg = "No authentication data found."
+<<<<<<< HEAD
             raise ProjectNotInit(msg)
+=======
+            logger.info(msg)
+            mask = os.umask(077)
+            open(txrc_file, 'w').close()
+            os.umask(mask)
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
         return txrc_file
 
     def validate_config(self):
@@ -283,6 +321,7 @@ class Project(object):
         """
         Store the config dictionary in the .tx/config file of the project.
         """
+<<<<<<< HEAD
         fh = open(self.config_file,"w")
         self.config.write(fh)
         fh.close()
@@ -291,6 +330,26 @@ class Project(object):
         mask = os.umask(077)
         fh = open(self.txrc_file, 'w')
         self.txrc.write(fh)
+=======
+        self._save_tx_config()
+        self._save_txrc_file()
+
+    def _save_tx_config(self, config=None):
+        """Save the local config file."""
+        if config is None:
+            config = self.config
+        fh = open(self.config_file,"w")
+        config.write(fh)
+        fh.close()
+
+    def _save_txrc_file(self, txrc=None):
+        """Save the .transifexrc file."""
+        if txrc is None:
+            txrc = self.txrc
+        mask = os.umask(077)
+        fh = open(self.txrc_file, 'w')
+        txrc.write(fh)
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
         fh.close()
         os.umask(mask)
 
@@ -396,7 +455,11 @@ class Project(object):
                 }
                 if not self._should_update_translation(**kwargs):
                     msg = "Skipping '%s' translation (file: %s)."
+<<<<<<< HEAD
                     logger.warning(
+=======
+                    logger.info(
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
                         msg % (color_text(remote_lang, "RED"), local_file)
                     )
                     continue
@@ -445,7 +508,11 @@ class Project(object):
                         )
                         if not satisfies_min:
                             msg = "Skipping language %s due to used options."
+<<<<<<< HEAD
                             logger.warning(msg % lang)
+=======
+                            logger.info(msg % lang)
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
                             continue
                     logger.warning(
                         " -> %s: %s" % (color_text(remote_lang, "RED"), local_file)
@@ -519,7 +586,11 @@ class Project(object):
                     )
                 except Exception, e:
                     if not skip:
+<<<<<<< HEAD
                         raise e
+=======
+                        raise
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
                     else:
                         logger.error(e)
             else:
@@ -566,7 +637,11 @@ class Project(object):
                     }
                     if not self._should_push_translation(**kwargs):
                         msg = "Skipping '%s' translation (file: %s)."
+<<<<<<< HEAD
                         logger.warning(msg % (color_text(lang, "RED"), local_file))
+=======
+                        logger.info(msg % (color_text(lang, "RED"), local_file))
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
                         continue
 
                     msg = "Pushing '%s' translations (file: %s)"
@@ -740,12 +815,21 @@ class Project(object):
         base64string = base64.encodestring('%s:%s' % (username, passwd))[:-1]
         authheader = "Basic %s" % base64string
         req.add_header("Authorization", authheader)
+<<<<<<< HEAD
 
         try:
             fh = urllib2.urlopen(req)
             raw = fh.read()
             fh.close()
             return raw
+=======
+        req.add_header("Accept-Encoding", "gzip,deflate")
+        req.add_header("User-Agent", user_agent_identifier())
+
+        try:
+            response = urllib2.urlopen(req, timeout=300)
+            return http_response(response)
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
         except urllib2.HTTPError, e:
             if e.code in [401, 403, 404]:
                 raise e
@@ -1198,4 +1282,7 @@ class Project(object):
             return
         for r in resources:
             self.config.set(r, key, value)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af

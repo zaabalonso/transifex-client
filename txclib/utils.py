@@ -154,6 +154,32 @@ def mkdir_p(path):
             raise
 
 
+<<<<<<< HEAD
+=======
+def confirm(prompt='Continue?', default=True):
+    """
+    Prompt the user for a Yes/No answer.
+
+    Args:
+        prompt: The text displayed to the user ([Y/n] will be appended)
+        default: If the default value will be yes or no
+    """
+    valid_yes = ['Y', 'y', 'Yes', 'yes', ]
+    valid_no = ['N', 'n', 'No', 'no', ]
+    if default:
+        prompt = prompt + '[Y/n]'
+        valid_yes.append('')
+    else:
+        prompt = prompt + '[y/N]'
+        valid_no.append('')
+
+    ans = raw_input(prompt)
+    while (ans not in valid_yes and ans not in valid_no):
+        ans = raw_input(prompt)
+
+    return ans in valid_yes
+
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 
 # Stuff for command line colored output
 

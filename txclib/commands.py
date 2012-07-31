@@ -15,7 +15,13 @@ adding code to this file you must take care of the following:
  * All functions should use the OptionParser and should have a usage and
    descripition field.
 """
+<<<<<<< HEAD
 import os, re, shutil, sys, unicodedata
+=======
+import os
+import re, shutil
+import sys
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 from optparse import OptionParser, OptionGroup
 import ConfigParser
 
@@ -29,6 +35,7 @@ from txclib.parsers import delete_parser, help_parser, parse_csv_option, \
 from txclib.log import logger
 
 
+<<<<<<< HEAD
 DEFAULT_FORMATS = {
     '.properties': 'PROPERTIES',
     '.xml': 'ANDROID',
@@ -41,6 +48,8 @@ DEFAULT_FORMATS = {
 }
 
 
+=======
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 def cmd_init(argv, path_to_tx):
     "Initialize a new transifex project."
     parser = init_parser()
@@ -73,7 +82,11 @@ def cmd_init(argv, path_to_tx):
     txrc = os.path.join(home, ".transifexrc")
     config = OrderedRawConfigParser()
 
+<<<<<<< HEAD
     default_transifex = "https://www.transifex.net"
+=======
+    default_transifex = "https://www.transifex.com"
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     transifex_host = options.host or raw_input("Transifex instance [%s]: " % default_transifex)
 
     if not transifex_host:
@@ -536,6 +549,7 @@ def cmd_delete(argv, path_to_tx):
     logger.info("Done.")
 
 
+<<<<<<< HEAD
 
 
 def cmd_wui(argv, path_to_tx):
@@ -742,6 +756,8 @@ def cmd_wui(argv, path_to_tx):
     app.run(debug=True)
 
 
+=======
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 def _go_to_dir(path):
     """Change the current working directory to the directory specified as
     argument.
@@ -773,7 +789,11 @@ def _set_mode(resource, value, path_to_tx):
 
 def _set_type(resource, value, path_to_tx):
     """Set the i18n type in the .tx/config file."""
+<<<<<<< HEAD
     args = (resource, 'type', value, path_to_tx, 'set_i19n_type')
+=======
+    args = (resource, 'type', value, path_to_tx, 'set_i18n_type')
+>>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     _set_project_option(*args)
 
 
