@@ -76,7 +76,7 @@ function pullClick(){
 			}
 		}
 	}
-	var superurl = "http://localhost:5000/tx/_push/" +languaheLink;
+	var superurl = "http://localhost:5000/tx/_pull/" +languaheLink;
 	window.open (superurl,"_self",false);
 }
 
