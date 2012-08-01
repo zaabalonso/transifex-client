@@ -60,6 +60,28 @@ function pushClick(){
 	window.open (superurl,"_self",false);
 }
 
+function pullClick(){
+	var flag=false;
+
+	for (var k=0; k<glossesArray.length; k++)
+	{
+		var checkBox = document.getElementById(glossesArray[k]);
+		var languaheLink;
+		if(checkBox.checked){
+			if(flag){
+				languaheLink = languaheLink + "-" + glossesArray[k];
+			}else{
+				languaheLink = glossesArray[k];
+				flag=true;
+			}
+		}
+	}
+	var superurl = "http://localhost:5000/tx/_push/" +languaheLink;
+	window.open (superurl,"_self",false);
+}
+
+
+
 function handleRefresh(url) {
 	console.log("here");
 	
