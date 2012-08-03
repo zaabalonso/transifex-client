@@ -15,13 +15,7 @@ adding code to this file you must take care of the following:
  * All functions should use the OptionParser and should have a usage and
    descripition field.
 """
-<<<<<<< HEAD
 import os, re, shutil, sys, unicodedata
-=======
-import os
-import re, shutil
-import sys
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 from optparse import OptionParser, OptionGroup
 import ConfigParser
 
@@ -35,7 +29,6 @@ from txclib.parsers import delete_parser, help_parser, parse_csv_option, \
 from txclib.log import logger
 
 
-<<<<<<< HEAD
 DEFAULT_FORMATS = {
     '.properties': 'PROPERTIES',
     '.xml': 'ANDROID',
@@ -48,8 +41,6 @@ DEFAULT_FORMATS = {
 }
 
 
-=======
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 def cmd_init(argv, path_to_tx):
     "Initialize a new transifex project."
     parser = init_parser()
@@ -82,11 +73,7 @@ def cmd_init(argv, path_to_tx):
     txrc = os.path.join(home, ".transifexrc")
     config = OrderedRawConfigParser()
 
-<<<<<<< HEAD
     default_transifex = "https://www.transifex.net"
-=======
-    default_transifex = "https://www.transifex.com"
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     transifex_host = options.host or raw_input("Transifex instance [%s]: " % default_transifex)
 
     if not transifex_host:
@@ -361,10 +348,12 @@ def cmd_pull(argv, path_to_tx):
     "Pull files from remote server to local repository"
     parser = pull_parser()
     (options, args) = parser.parse_args(argv)
+    logger.info(argv);
     if options.fetchall and options.languages:
         parser.error("You can't user a language filter along with the"\
             " -a|--all option")
     languages = parse_csv_option(options.languages)
+    logger.info(languages);
     resources = parse_csv_option(options.resources)
     skip = options.skip_errors
     minimum_perc = options.minimum_perc or None
@@ -549,7 +538,6 @@ def cmd_delete(argv, path_to_tx):
     logger.info("Done.")
 
 
-<<<<<<< HEAD
 
 
 def cmd_wui(argv, path_to_tx):
@@ -582,9 +570,9 @@ def cmd_wui(argv, path_to_tx):
 	pickpath = pickpath.replace("-","/")
 	try:
 		_go_to_dir(pickpath)
-	except UnInitializedError, e:
-		utils.logger.error(e)
-		return
+	#except UnInitializedError, e:
+		#utils.logger.error(e)
+	except:	return "that is not a valid path"
 
 
 	prj = project.Project(pickpath)
@@ -660,58 +648,37 @@ def cmd_wui(argv, path_to_tx):
             res_list=res_list, txc_version=txc_version, username=username, password=password)
 
 
-    @app.route('/_pull')
-    def pull():
+    @app.route('/tx/_pull/<glosses>')
+    def pull(glosses):
        
 	    
 	prj = project.Project(path_to_tx)
-        resource = request.args.get('resource')
-        prj.pull(resources=[resource], fetchall=True, skip=True)
-        return jsonify(result="OK")
+        #resource = request.args.get('resource')
+       	glosses = glosses.split("-")
+	#logger.info(glosses[-1])
+	resource = glosses[-1]
+	glosses.pop()
+	prj.pull(resources=[resource], fetchall=False, skip=True, languages=glosses)
 
+	#return jsonify(result="OK")
+	return "ok"
+    
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+	        return 'This page does not exist', 404
 
     @app.route('/tx/_push/<locales>')
     def push(locales):
-	
-        "Print status of current project"
-        from txclib import get_version
-        txc_version = get_version()
 
         prj = project.Project(path_to_tx)
-
-        # Let's create a resource list from our config file
-        res_list = []
-        prev_proj = ''
-        for idx, res in enumerate(prj.get_resource_list()):
-            hostname = prj.get_resource_host(res)
-            p, r = res.split('.')
-            p_url = '%s/projects/p/%s' % (hostname, p)
-            r_url = '%s/resource/%s' % (p_url, r)
-            sfile = prj.get_resource_option(res, 'source_file') or "N/A"
-            expr = prj.config.get(res, "file_filter")
-            expr_highlight = expr.replace('<lang>', '<span class="lang">&lt;lang&gt;</span>')
-            res_list.append({'id': res,
-                             'p_name': p,
-                             'p_url': p_url,
-                             'r_name': r,
-                             'r_url': r_url,
-                             'source_file': sfile,
-                             'expr': expr,
-                             'expr_highlight': expr_highlight})
-        res_list = sorted(res_list, key=lambda k: k['id'])
-        username, password = prj.getset_host_credentials(hostname)
-	locales = locales.split("-")
-
-        return render_template('index.html',res_list=res_list, txc_version=txc_version, username=username, password=password)	    
-	    
-	
-
-
-      #  prj = project.Project(path_to_tx)
-       # resource = request.args.get('resource')
-       # prj.push(resources=[resource], source=True)
-       # prj.push(resources=[resource], skip=True, translations=True, source=False)
-       # return jsonify(result="OK")
+        #resource = request.args.get('resource')
+	locales=locales.split("-")
+	resource=locales[-1]
+	locales.pop()
+        prj.push(resources=[resource], source=True)
+        prj.push(resources=[resource], skip=True, translations=True, source=False)
+        return jsonify(result="OK")
 
 
     @app.route('/_rename', methods=['POST'])
@@ -756,8 +723,6 @@ def cmd_wui(argv, path_to_tx):
     app.run(debug=True)
 
 
-=======
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 def _go_to_dir(path):
     """Change the current working directory to the directory specified as
     argument.
@@ -789,11 +754,7 @@ def _set_mode(resource, value, path_to_tx):
 
 def _set_type(resource, value, path_to_tx):
     """Set the i18n type in the .tx/config file."""
-<<<<<<< HEAD
     args = (resource, 'type', value, path_to_tx, 'set_i19n_type')
-=======
-    args = (resource, 'type', value, path_to_tx, 'set_i18n_type')
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     _set_project_option(*args)
 
 

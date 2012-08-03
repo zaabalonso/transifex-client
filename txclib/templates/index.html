@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <!-- Le styles -->
-        
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/txclient.css') }}" rel="stylesheet">
@@ -70,7 +68,7 @@
 <div class="cols">
         <section class="first col">
             <header>
-            	<h1>Files</h1>
+            	<h1>Resource Files</h1>
             </header>
             
             <div id="access" >
@@ -80,12 +78,14 @@
 		    <li>&nbsp;&nbsp;&nbsp;&nbsp;<span data-action='rename' class="resname edit" id="{{ res.id }}">{{ res.id }}</span>&nbsp;&nbsp;
 
         		<span class="edit resexpr" data-id="{{ res.id }}">{{ res.expr_highlight|safe }}</span></dd>&nbsp;&nbsp;
-			<input type="button" onclick=onClick("{{ res.id }}") id="{{ loop.index }}" class="pickMeUp"  value="pickMeUp" name="{{ res.id }}">
+			<input type="button" onclick=onClick("{{ res.id }}") id="pickMe" class="pickMeUp"  value="pickMeUp" name="{{ res.id }}">
 			</li>
 			</div><br ></br>        	
         	{% endfor %}
         	</div>		
         	</ul>
+        	<BR></BR>
+        <input type="button" id="back" onClick="location.href='http://localhost:5000/tx/index/'" value="Project select" >
         </section>        
         <section class="col">
             <header>
@@ -98,7 +98,7 @@
 		<div id="buttons">
 			<label>With selected:&nbsp;&nbsp;</label><br>
 			<br></br>
-			<button type="submit" class="btn push-action" rel="tooltip" data-original-title="Pull all languages, including source"><i class="icon-download"></i>Pull translations</button>
+			<button type="submit" class="btn push-action" rel="tooltip" data-original-title="Pull all languages, including source" onclick=pullClick()><i class="icon-download"></i>Pull translations</button>
 			<button type="submit" class="btn push-action btn-danger" rel="tooltip" data-original-title="push all languages except source" onclick=pushClick()>
 				<i class="icon-upload icon-white"></i> Push source</button>
 		</div>	
@@ -111,13 +111,7 @@
       </footer>
       </div>
     </div>
-
     </div>
-
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-transition.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-alert.js') }}"></script>
@@ -131,11 +125,11 @@
     <script src="{{ url_for('static', filename='js/bootstrap-collapse.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-carousel.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-typeahead.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/jquery.jeditable.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/txclient.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ url_for('static', filename='js/jquery-1.4.2') }}"></script>
+    <!--
+<script type="text/javascript">
       $(document).ready(function(){
         $('.pull-action').tooltip()
         $('.push-action').tooltip()
@@ -143,8 +137,6 @@
         $('.rowcheckbox').prop("checked", true);
       });
     </script>
-    
-
-
+-->
   </body>
 </html>
