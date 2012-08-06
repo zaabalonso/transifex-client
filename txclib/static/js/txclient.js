@@ -8,31 +8,6 @@ function onClick(yihaaa){
 	handleButtonClick(yihaaa);
 }
 
-/*
-function pushClick(){
-	var flag=false;
-	
-	for (var j=0; j<glossesArray.length; j++)
-	{
-		var checkBox = document.getElementById(glossesArray[j]);
-		var languageLink;
-
-		if(checkBox.checked){
-			if(flag){
-				languageLink = languageLink + "-" + glossesArray[j];
-			}else{
-				languageLink = glossesArray[j];
-				flag = true;
-			}		
-		}
-
-
-	}
-	
-	var superurl = "http://localhost:5000/tx/_push/" + languageLink + "-" + resID;
-	window.open (superurl,"_self",false);
-}
-*/
 
 function handleRefresh(url) {
 	var newScriptElement = document.createElement("script");
@@ -52,12 +27,13 @@ function updateStats(stats) {
 	var salesDiv = document.getElementById("stats");
 	var newData = [];
 	
+
 	for ( var s in stats )
 	{
     		var data = stats[s];
     		data.language = s;
     		newData.push(data.language);
-    }
+    	}
     
     /*
 for(var k=0; k<newData.length-1; k++)
@@ -67,7 +43,7 @@ for(var k=0; k<newData.length-1; k++)
 
 */
 //gia to sorting alla den doulevei!
-
+	if(!salesDiv.firstChild){
 	for (var i = 0; i < newData.length; i++) {
 		var glossa = newData[i];
 		var stat = stats[glossa];
@@ -115,7 +91,7 @@ for(var k=0; k<newData.length-1; k++)
 
 	}
 			//alert(zaab);
-
+	}
 	if (stats.length > 0) {
 		lastReportTime = stats[stats.length-1].time;
 
