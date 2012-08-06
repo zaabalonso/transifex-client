@@ -30,10 +30,6 @@
 	}
     </script>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
   </head>
   <body>
   <!-- header -->
@@ -98,8 +94,8 @@
 		<div id="buttons">
 			<label>With selected:&nbsp;&nbsp;</label><br>
 			<br></br>
-			<button type="submit" class="btn push-action" rel="tooltip" data-original-title="Pull all languages, including source" onclick=pullClick()><i class="icon-download"></i>Pull translations</button>
-			<button type="submit" class="btn push-action btn-danger" rel="tooltip" data-original-title="push all languages except source" onclick=pushClick()>
+			<button type="submit" id="pull" class="btn push-action" rel="tooltip" data-original-title="Pull all languages, including source" ><i class="icon-download"></i>Pull translations</button>
+			<button type="submit" id="push" class="btn push-action btn-danger" rel="tooltip" data-original-title="push all languages except source">
 				<i class="icon-upload icon-white"></i> Push source</button>
 		</div>	
         </section>
@@ -128,15 +124,5 @@
     <script src="{{ url_for('static', filename='js/jquery.jeditable.js') }}"></script>
     <script src="{{ url_for('static', filename='js/txclient.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-1.4.2') }}"></script>
-    <!--
-<script type="text/javascript">
-      $(document).ready(function(){
-        $('.pull-action').tooltip()
-        $('.push-action').tooltip()
-        /* All checkboxes enabled by default */
-        $('.rowcheckbox').prop("checked", true);
-      });
-    </script>
--->
   </body>
 </html>

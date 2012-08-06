@@ -646,12 +646,12 @@ def cmd_wui(argv, path_to_tx):
         username, password = prj.getset_host_credentials(hostname)
         return render_template('index.html',
             res_list=res_list, txc_version=txc_version, username=username, password=password)
-
-
-    @app.route('/tx/_pull/<glosses>')
-    def pull(glosses):
+   
+    
+    @app.route('/tx/_pull', methods=['GET', 'POST'])
+    def pull():
        
-	    
+	glosses = request.form['name']    
 	prj = project.Project(path_to_tx)
         #resource = request.args.get('resource')
        	glosses = glosses.split("-")
@@ -660,17 +660,18 @@ def cmd_wui(argv, path_to_tx):
 	glosses.pop()
 	prj.pull(resources=[resource], fetchall=False, skip=True, languages=glosses)
 
-	#return jsonify(result="OK")
-	return "ok"
+	return jsonify(result=[resource])
+	
     
 
     @app.errorhandler(404)
     def page_not_found(error):
 	        return 'This page does not exist', 404
 
-    @app.route('/tx/_push/<locales>')
-    def push(locales):
-
+    @app.route('/tx/_push', methods=['GET','POST'])
+    def push():
+	
+	locales = request.form['locales']
         prj = project.Project(path_to_tx)
         #resource = request.args.get('resource')
 	locales=locales.split("-")

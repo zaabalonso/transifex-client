@@ -1,25 +1,14 @@
-
-
 var lastReportTime = 0;
 var glossesArray = new Array();
 var resID;
-//window.onload = init;
 
-//function init() {
-//	var button = document.querySelectorAll("input.pickMeUp");
-//	var counterZ = 
-//	resID = button[].name;
-//	alert(button[0].id);
-//	button.onclick = handleButtonClick;
-//	var pickMeUp = document.getElementById("pickMeUp");
-//	button.onclick = pickMeHandler;
-//}
 
 function onClick(yihaaa){
 	resID = yihaaa;
 	handleButtonClick(yihaaa);
 }
 
+/*
 function pushClick(){
 	var flag=false;
 	
@@ -43,28 +32,7 @@ function pushClick(){
 	var superurl = "http://localhost:5000/tx/_push/" + languageLink + "-" + resID;
 	window.open (superurl,"_self",false);
 }
-
-function pullClick(){
-	var flag=false;
-
-	for (var k=0; k<glossesArray.length; k++)
-	{
-		var checkBox = document.getElementById(glossesArray[k]);
-		var languaheLink;
-		if(checkBox.checked){
-			if(flag){
-				languaheLink = languaheLink + "-" + glossesArray[k];
-			}else{
-				languaheLink = glossesArray[k];
-				flag=true;
-			}
-		}
-	}
-	var superurl = "http://localhost:5000/tx/_pull/" + languaheLink + "-" + resID;
-	window.open (superurl,"_self",false);
-}
-
-
+*/
 
 function handleRefresh(url) {
 	var newScriptElement = document.createElement("script");
@@ -108,7 +76,11 @@ for(var k=0; k<newData.length-1; k++)
 		div.setAttribute("id", "progressbar");
 		var indicator = document.createElement("label");
 		indicator.setAttribute("id","indicator");
-		
+		var left = document.createElement("div");
+		left.setAttribute("id","left");
+		var right = document.createElement("div");
+		right.setAttribute("id","right");
+
 		var checkbox = document.createElement('input');
 		checkbox.type = "checkbox";
 		checkbox.name = "name";
@@ -116,19 +88,22 @@ for(var k=0; k<newData.length-1; k++)
 		checkbox.id = glossa;
 
 		glossesArray[i]=glossa;
-
-		div.appendChild(checkbox);
-		div.appendChild(indicator);
+		div.appendChild(left);
+		div.appendChild(right);	
+		left.appendChild(checkbox);
+		left.appendChild(indicator);
 				
 		var zaab = parseInt(stat.completed, 10);
 			//console.log(zaab);
 
 		if(zaab < 35){
-			indicator.innerHTML = glossa;
+			indicator.innerHTML = glossa + " : " + stat.completed;
 		}else{
 			indicator.innerHTML = glossa + " : " + stat.completed;
-			} 
+			}
+	       right.innerHTML= stat.last_update;	
 		indicator.style.width = stat.completed;
+		//div.style.width = stat.completed;
 		//indicator.innerHTML = glossa + " : " + stat.completed;
 		
 		if (salesDiv.childElementCount == 0) {
@@ -162,3 +137,65 @@ function handleButtonClick(e) {
 		handleRefresh(url);
 	}
 }
+
+$(document).ready(function() {
+	$('#pull').click(function(){
+	
+	var flag=false;
+
+	for (var k=0; k<glossesArray.length; k++)
+	{
+		var checkBox = document.getElementById(glossesArray[k]);
+		var languaheLink;
+		if(checkBox.checked){
+			if(flag){
+				languaheLink = languaheLink + "-" + glossesArray[k];
+			}else{
+				languaheLink = glossesArray[k];
+				flag=true;
+			}
+		}
+	}
+	var superurl = "http://localhost:5000/tx/login/" + languaheLink + "-" + resID;
+		$.ajax({
+		type: "POST",
+		url: "http://localhost:5000/tx/_pull",
+		data: {
+		"name": superurl
+	},
+		success: function(data){
+			alert("translations have been downloaded!");
+					
+	}
+ });
+
+});
+	$('#push').click(function(){
+
+		var flag=false;
+
+		for (var l=0; l<glossesArray.length; l++){
+			var checkBox = document.getElementById(glossesArray[l]);
+			var languaheLink;
+			if(checkBox.checked){
+				if(flag){
+					languaheLink =languaheLink + "-" + glossesArray[l];
+				}else{
+					languaheLink = glossesArray[l];
+					flag = true;
+				}
+			}
+		}
+		var superurl = "http://localhost:5000/tx/login/" + languaheLink + "-" + resID;
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:5000/tx/_push",
+			data: {
+				"locales" : superurl
+			},
+			success: function(data){
+					 alert("translations have been pushed!");
+			}
+		});
+	});
+});
