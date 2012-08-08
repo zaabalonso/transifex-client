@@ -67,13 +67,11 @@ for(var k=0; k<newData.length-1; k++)
 		div.appendChild(left);
 		div.appendChild(right);	
 		left.appendChild(checkbox);
-		left.appendChild(indicator);
-				
+		left.appendChild(indicator);		
 		var zaab = parseInt(stat.completed, 10);
-			//console.log(zaab);
 
 		if(zaab < 35){
-			indicator.innerHTML = glossa + " : " + stat.completed;
+			indicator.innerHTML = glossa;
 		}else{
 			indicator.innerHTML = glossa + " : " + stat.completed;
 			}
@@ -132,13 +130,15 @@ $(document).ready(function() {
 			}
 		}
 	}
-	var superurl = "http://localhost:5000/tx/login/" + languaheLink + "-" + resID;
+	//alert(languaheLink);
+	var superurl = languaheLink + "-" + resID;
+
 		$.ajax({
 		type: "POST",
 		url: "http://localhost:5000/tx/_pull",
 		data: {
-		"name": superurl
-	},
+			"name": superurl
+		},
 		success: function(data){
 			alert("translations have been downloaded!");
 					
@@ -162,7 +162,7 @@ $(document).ready(function() {
 				}
 			}
 		}
-		var superurl = "http://localhost:5000/tx/login/" + languaheLink + "-" + resID;
+		var superurl = languaheLink + "-" + resID;
 		$.ajax({
 			type: "POST",
 			url: "http://localhost:5000/tx/_push",

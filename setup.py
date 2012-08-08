@@ -35,34 +35,19 @@ setup(
     scripts=scripts,
     description="A command line interface for Transifex",
     long_description=long_description,
-<<<<<<< HEAD
     author="Indifex Ltd.",
     author_email="info@indifex.com",
     url="http://www.indifex.com",
-=======
-    author="Transifex",
-    author_email="info@transifex.com",
-    url="https://www.transifex.com",
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     license="GPLv2",
     dependency_links = [
     ],
     setup_requires = [
     ],
     install_requires = install_requires,
-<<<<<<< HEAD
     data_files=[
     ],
     zip_safe=False,
     packages=find_packages(),
-=======
-    tests_require = ["mock", ],
-    data_files=[
-    ],
-    test_suite="tests",
-    zip_safe=False,
-    packages=['txclib', ],
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     include_package_data=True,
     package_data = package_data,
     keywords = ('translation', 'localization', 'internationalization',),

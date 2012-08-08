@@ -8,11 +8,7 @@ For further information visit http://code.indifex.com/transifex-client
 """
 
 
-<<<<<<< HEAD
 VERSION = (0, 7, 0, 'final')
-=======
-VERSION = (0, 9, 0, 'devel')
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 
 def get_version():
     version = '%s.%s' % (VERSION[0], VERSION[1])

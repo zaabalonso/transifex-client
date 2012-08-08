@@ -67,12 +67,7 @@ def main(argv):
     )
     parser.add_option(
         "--disable-colors", action="store_true", dest="color_disable",
-<<<<<<< HEAD
         default=(os.name == 'nt'), help="disable colors in the output of commands"
-=======
-        default=(os.name == 'nt' or not sys.stdout.isatty()),
-        help="disable colors in the output of commands"
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     )
     (options, args) = parser.parse_args()
 

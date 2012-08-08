@@ -168,11 +168,8 @@ def set_parser():
     parser = EpilogParser(usage=usage, description=description, epilog=epilog)
     parser.add_option("--auto-local", action="store_true", dest="local",
         default=False, help="Used when auto configuring local project.")
-<<<<<<< HEAD
     parser.add_option("--auto-mass-local", action="store_true", dest="masslocal",
         default=False, help="Mass configure project from a directory with files.")
-=======
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
     parser.add_option("--auto-remote", action="store_true", dest="remote",
         default=False, help="Used when adding remote files from Transifex"
         " server.")
@@ -195,11 +192,7 @@ def set_parser():
             "Specify the i18n type of the resource(s). This is only needed, if "
             "the resource(s) does not exist yet in Transifex. For a list of "
             "available i18n types, see "
-<<<<<<< HEAD
             "http://help.transifex.net/features/formats.html"
-=======
-            "http://help.transifex.com/features/formats.html"
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
         )
     )
     parser.add_option("--minimum-perc", action="store", dest="minimum_perc",
@@ -211,11 +204,7 @@ def set_parser():
     parser.add_option(
         "--mode", action="store", dest="mode", help=(
             "Specify the mode of the translation file to pull (e.g. "
-<<<<<<< HEAD
             "'reviewed'). See http://help.transifex.net/features/client/"
-=======
-            "'reviewed'). See http://help.transifex.com/features/client/"
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
             "index.html#defining-the-mode-of-the-translated-file for the"
             "available values."
         )
@@ -246,7 +235,6 @@ def status_parser():
     return parser
 
 
-<<<<<<< HEAD
 def wui_parser():
     usage="usage: %prog [tx_options] wui [options]"
     description="Run a web-based User Interface for the client."
@@ -254,8 +242,6 @@ def wui_parser():
     return parser
     
 
-=======
->>>>>>> 3f4460aaedd83bb6c2f319fde59fa59d672b06af
 def parse_csv_option(option):
     """Return a list out of the comma-separated option or an empty list."""
     if option:

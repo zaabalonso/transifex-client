@@ -28,6 +28,8 @@ from txclib.parsers import delete_parser, help_parser, parse_csv_option, \
         status_parser, pull_parser, set_parser, push_parser, init_parser
 from txclib.log import logger
 
+#PROJECT_PATH = ""
+
 
 DEFAULT_FORMATS = {
     '.properties': 'PROPERTIES',
@@ -547,12 +549,18 @@ def cmd_wui(argv, path_to_tx):
     app = Flask(__name__)
     app.secret_key = 'blahdiblah'
 
+   # global PROJECT_PATH
+   # PROJECT_PATH = os.path.abspath(__file__)
+
+    #template_path = os.path.join(PROJECT_PATH, "templates/init.html")
+
     @app.route('/tx/index/')
     def index():
 	"""Load start page where you select your project folder
 	or load history projects from local db"""
 	from txclib import get_version
 	txc_version = get_version()     
+
 	prj = project.Project(path_to_tx)
 	current_path = os.getcwd()
 	# Let's create a resource list from our config file
@@ -563,20 +571,26 @@ def cmd_wui(argv, path_to_tx):
 	username, password = prj.getset_host_credentials(hostname)
    	return render_template('init.html', txc_version=txc_version, username=username, current_path=current_path)
     
-    @app.route('/tx/pathpicker/<pickpath>')
-    def pathpicker(pickpath):
-	from txclib import get_version
-	txc_version= get_version()
+    @app.route('/tx/pathpicker/', methods=['GET', 'POST'])
+    def pathpicker():
+	pickpath = request.form['name']
 	pickpath = pickpath.replace("-","/")
 	try:
-		_go_to_dir(pickpath)
-	#except UnInitializedError, e:
-		#utils.logger.error(e)
-	except:	return "that is not a valid path"
+		path_to_tx = _go_to_dir(pickpath)
+		return "success"
+	except:	
+		return "failed"
 
+    @app.route('/tx/changepathpage/<filepathz>')
+    def changepathpage(filepathz):
+	from txclib import get_version
+	txc_version = get_version()
 
-	prj = project.Project(pickpath)
-        res_list = []
+	filepathz = filepathz.replace("-","/")
+		
+	prj = project.Project(filepathz)
+       
+	res_list = []
         prev_proj = ''
         for idx, res in enumerate(prj.get_resource_list()):
             hostname = prj.get_resource_host(res)
@@ -598,7 +612,7 @@ def cmd_wui(argv, path_to_tx):
 	username,password = prj.getset_host_credentials(hostname)
 
 	return render_template("index.html",res_list=res_list, txc_version=txc_version, username=username, password=password)
-
+	
 
     @app.route('/tx/checkme/<filepathz>')
     def checkme(filepathz):
@@ -650,19 +664,19 @@ def cmd_wui(argv, path_to_tx):
     
     @app.route('/tx/_pull', methods=['GET', 'POST'])
     def pull():
-       
-	glosses = request.form['name']    
+        #from ipdb import set_trace; set_trace()
+
+	glosses = request.form['name']
 	prj = project.Project(path_to_tx)
         #resource = request.args.get('resource')
        	glosses = glosses.split("-")
-	#logger.info(glosses[-1])
 	resource = glosses[-1]
 	glosses.pop()
 	prj.pull(resources=[resource], fetchall=False, skip=True, languages=glosses)
 
-	return jsonify(result=[resource])
+	return jsonify(result="OK")
 	
-    
+  
 
     @app.errorhandler(404)
     def page_not_found(error):
@@ -678,7 +692,7 @@ def cmd_wui(argv, path_to_tx):
 	resource=locales[-1]
 	locales.pop()
         prj.push(resources=[resource], source=True)
-        prj.push(resources=[resource], skip=True, translations=True, source=False)
+        prj.push(resources=[resource], skip=True, translations=True, source=False, languages=locales)
         return jsonify(result="OK")
 
 
@@ -739,6 +753,7 @@ def _go_to_dir(path):
             "Did you forget to run 'tx init' first?"
         )
     os.chdir(path)
+    return os.getcwd()
 
 
 def _set_minimum_perc(resource, value, path_to_tx):
