@@ -10,6 +10,9 @@ function onClick(yihaaa){
 
 
 function handleRefresh(url) {
+	//
+	//We are getting data using JSONP
+	//
 	var newScriptElement = document.createElement("script");
 	newScriptElement.setAttribute("src", url);
 	newScriptElement.setAttribute("id", "jsonp");
@@ -26,7 +29,6 @@ function handleRefresh(url) {
 function updateStats(stats) {
 	var salesDiv = document.getElementById("stats");
 	var newData = [];
-	
 
 	for ( var s in stats )
 	{
@@ -34,15 +36,20 @@ function updateStats(stats) {
     		data.language = s;
     		newData.push(data.language);
     	}
-    
-    /*
-for(var k=0; k<newData.length-1; k++)
-    {    
-	    newData.sort(function(a,b){return stats[newData[k]].completed - stats[newData[k+1]].completed});
-    }		
 
-*/
-//gia to sorting alla den doulevei!
+	//the sorting shit
+	//
+	newData.sort(function(a,b){
+		if (parseInt(stats[a].completed,10) < parseInt(stats[b].completed, 10))
+	              return -1;
+	      	if ( parseInt(stats[a].completed ,10) > parseInt(stats[b].completed,10))
+	              return 1;
+	      	return 0;
+	});
+
+
+	//getting stat data on the screen dynamicly
+	//
 	if(!salesDiv.firstChild){
 	for (var i = 0; i < newData.length; i++) {
 		var glossa = newData[i];
@@ -69,16 +76,17 @@ for(var k=0; k<newData.length-1; k++)
 		left.appendChild(checkbox);
 		left.appendChild(indicator);		
 		var zaab = parseInt(stat.completed, 10);
-
+		
+		//
+		//I dont display every stat.completed value cause the div on values below 35 is below 35px so no space for lang and stats.completed
+		//
 		if(zaab < 35){
 			indicator.innerHTML = glossa;
 		}else{
 			indicator.innerHTML = glossa + " : " + stat.completed;
 			}
-	       right.innerHTML= stat.last_update;	
+	        right.innerHTML= stat.last_update;	
 		indicator.style.width = stat.completed;
-		//div.style.width = stat.completed;
-		//indicator.innerHTML = glossa + " : " + stat.completed;
 		
 		if (salesDiv.childElementCount == 0) {
 			salesDiv.appendChild(div);
@@ -88,8 +96,10 @@ for(var k=0; k<newData.length-1; k++)
 		}
 
 	}
-			//alert(zaab);
+		
 	}
+	//We need that to suport live stats refresh in the future!
+	//
 	if (stats.length > 0) {
 		lastReportTime = stats[stats.length-1].time;
 
@@ -98,6 +108,10 @@ for(var k=0; k<newData.length-1; k++)
 }
 
 function handleButtonClick(e) {
+
+	//
+	//taking data from the transifex server as a json form!
+	//
 	var splitThem = e.split(".");
 	var projectName = splitThem[0];
 	var resourceName = splitThem[1];
